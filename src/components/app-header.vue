@@ -4,7 +4,7 @@
             <h2>Mister toys</h2>
         </div>
         <nav class="flex gap-1">
-            <router-link class="link" to="/">Home</router-link> 
+            <router-link class="link" to="/">Home</router-link>
             <router-link class="link" to="/toy">Toys</router-link>
             <router-link class="link" to="/dashboard">Dashboard</router-link>
             <router-link class="link" to="/about">About</router-link>

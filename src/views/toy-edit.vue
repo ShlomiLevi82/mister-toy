@@ -1,5 +1,6 @@
 <template>
     <section v-if="toyToEdit" class="toy-edit">
+        <h1>Edit</h1>
         <form class="form">
             <div class="form-control">
                 <label for="txt" class="form-label">Toy Name</label>

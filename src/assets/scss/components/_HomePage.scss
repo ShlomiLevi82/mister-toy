@@ -1,0 +1,13 @@
+.main-home{
+    margin-block-start: 1em;  
+
+    & h2{
+        color: #232424;
+    }
+
+    & p{
+        color: #4f5353;
+        margin-block-start: 1em;
+        text-align: justify;
+    }
+}

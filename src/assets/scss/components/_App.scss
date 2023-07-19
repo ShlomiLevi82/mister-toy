@@ -1,0 +1,37 @@
+body {
+    background: var(--gray-50);
+}
+
+.app-container {
+    min-height: 100vh;
+}
+
+.toy-app .btn {
+    align-self: flex-start;
+    border: 1px solid #ccc;
+    &:hover{
+        background-color: #f2eeee;
+    }
+}
+
+.shops-map {
+    width: 100%;
+}
+
+.main-header{
+    & nav{
+        gap: 1em;
+
+        & .link{
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            padding: 8px;
+
+            &:hover {
+                background-color: #f2f0f0 ; 
+                box-shadow: 5px 5px 10px 1px #757272;
+            }
+        }
+    }
+}
+

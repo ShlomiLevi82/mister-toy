@@ -1,0 +1,13 @@
+.toy-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+    & .toy-preview .custom-toyd{
+        align-items: flex-start;
+        
+        & header {
+                font-size: 1em;
+            }
+    }
+}
+

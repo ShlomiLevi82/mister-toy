@@ -16,7 +16,7 @@
             <h3>Reviews:</h3>
             <div class="review" v-for="review in toy.reviews" :key="review + toy._id">{{ review }}</div>
         </article>
-        <button @click="goBack" class="btn btn-primary">go back</button>
+        <button @click="goBack" class="btn go-back">go back</button>
     </section>
 </template>
 <script>
