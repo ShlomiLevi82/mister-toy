@@ -1,13 +1,40 @@
 .main-home{
     margin-block-start: 1em;  
 
-    & h2{
+    & h1{
         color: #232424;
+        font-size: 2em;
     }
 
     & p{
         color: #4f5353;
         margin-block-start: 1em;
         text-align: justify;
+    }
+}
+
+.login{
+    margin-block: 1em;
+    
+    & h1{
+        font-size: 2em;
+        margin-block-end: 1em;
+    }
+
+    & input{
+        height: 2.5em;
+        margin-block-end: 1em;
+    }
+
+    & button{
+        font-size: 1.5em;
+        padding: 0.5em;
+        border-radius: 2em;
+        border: none;
+        width:6em;
+        &:hover{
+            cursor: pointer;
+            background-color: #dae1e1;
+        }
     }
 }
