@@ -1,99 +1,113 @@
-import { storageService } from './async-storage.service.js'
+import { httpService } from './http.service'
 
-const USER_KEY = 'userDB'
+// TODO: remove this dependency, subscribe to user-updated from UserDetails cmp
+import {
+  socketService,
+  SOCKET_EVENT_USER_UPDATED,
+  SOCKET_EMIT_USER_WATCH,
+} from './socket.service'
+import { showSuccessMsg } from './event-bus.service'
+
+import { store } from '../store/index'
+
 const STORAGE_KEY_LOGGEDIN_USER = 'loggedinUser'
 
 export const userService = {
-  getLoggedinUser,
   login,
   logout,
   signup,
-  save,
-  addActivity,
+  getLoggedinUser,
+  saveLocalUser,
+  getUsers,
+  getById,
+  remove,
+  update,
+  changeScore,
 }
 
-// Demo Data:
-// _createUser()
+window.userService = userService
 
-function getLoggedinUser() {
-  let user = JSON.parse(
-    sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER) || null
+function getUsers() {
+  return httpService.get(`user`)
+}
+
+function onUserUpdate(user) {
+  showSuccessMsg(
+    `This user ${user.fullname} just got updated from socket, new score: ${user.score}`
   )
-  if (!user) {
-    user = { username: 'ab', password: '123' }
-    login(user)
-  }
+  store.dispatch({ type: 'setWatchedUser', user })
+}
+
+async function getById(userId) {
+  const user = await httpService.get(`user/${userId}`)
+
+  socketService.off(SOCKET_EVENT_USER_UPDATED, onUserUpdate)
+  socketService.emit(SOCKET_EMIT_USER_WATCH, userId)
+  socketService.on(SOCKET_EVENT_USER_UPDATED, onUserUpdate)
+
+  return user
+}
+function remove(userId) {
+  return httpService.delete(`user/${userId}`)
+}
+
+async function update({ _id, score }) {
+  var user = await httpService.get(`user/${_id}`)
+  user.score = score
+
+  user = await httpService.put(`user/${user._id}`, user)
+
+  // Handle case in which admin updates other user's details
+  if (getLoggedinUser()._id === user._id) saveLocalUser(user)
   return user
 }
 
-function login(credentials) {
-  return storageService.query(USER_KEY).then((users) => {
-    const user = users.find((u) => u.username === credentials.username)
-    if (user) {
-      return _saveUserToStorage(user)
-    } else {
-      return Promise.reject('Invalid credentials')
-    }
-  })
+async function login(userCred) {
+  const user = await httpService.post('auth/login', userCred)
+  if (user) {
+    // socketService.login(user._id)
+    return saveLocalUser(user)
+  }
 }
-
-function logout() {
+async function signup(userCred) {
+  if (!userCred.imgUrl)
+    userCred.imgUrl =
+      'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
+  const user = await httpService.post('auth/signup', userCred)
+  socketService.login(user._id)
+  return saveLocalUser(user)
+}
+async function logout() {
   sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
-  return Promise.resolve()
+  socketService.logout()
+  return await httpService.post('auth/logout')
 }
 
-function signup(credentials) {
-  return storageService.query(USER_KEY).then((users) => {
-    const user = users.find((u) => u.username === credentials.username)
-    if (user) return Promise.reject('Username already taken')
-    return storageService
-      .post(USER_KEY, {
-        ...credentials,
-        fullname: '',
-        prefs: {
-          color: '#ffffff',
-          bgColor: '#0b7285',
-        },
-        activities: [],
-      })
-      .then((user) => {
-        return _saveUserToStorage(user)
-      })
-  })
-}
-function addActivity(activity) {
+async function changeScore(by) {
   const user = getLoggedinUser()
-  user.activities.push(activity)
-  return save(user)
+  if (!user) throw new Error('Not loggedin')
+  user.score = user.score + by || by
+  await update(user)
+  return user.score
 }
 
-function save(user) {
-  return storageService.put(USER_KEY, user).then(() => {
-    return _saveUserToStorage(user)
-  })
-}
-
-function _saveUserToStorage(user) {
+function saveLocalUser(user) {
+  user = {
+    _id: user._id,
+    fullname: user.fullname,
+    imgUrl: user.imgUrl,
+    score: user.score,
+  }
   sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
   return user
 }
 
-function _createUser() {
-  const user = localStorage.getItem(STORAGE_KEY_LOGGEDIN_USER)
-  if (!user)
-    signup({
-      fullname: 'Ab',
-      userName: 'ab',
-      password: '123',
-      prefs: {
-        color: '#ffffff',
-        bgColor: '#0b7285',
-      },
-      activities: [
-        { txt: 'Added a new toy', at: 1523873242735 },
-        { txt: 'Added a new msg', at: 1657354690272 },
-        { txt: 'Updated a toy', at: 1657354745868 },
-      ],
-    })
-  login({ username: 'ab', password: '123' })
+function getLoggedinUser() {
+  return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
 }
+
+// ;(async ()=>{
+//     await userService.signup({fullname: 'Puki Norma', username: 'puki', password:'123',score: 10000, isAdmin: false})
+//     await userService.signup({fullname: 'Master Adminov', username: 'admin', password:'123', score: 10000, isAdmin: true})
+//     await userService.signup({fullname: 'Muki G', username: 'muki', password:'123', score: 10000})
+// })()

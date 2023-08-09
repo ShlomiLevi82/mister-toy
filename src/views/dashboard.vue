@@ -1,5 +1,5 @@
 <template>
-    <section v-if="toys" class="dashboard">
+    <section v-if="activitys" class="dashboard">
         <h3>Average Price by type</h3>
         <chart :data="pricesData" />
         <h3>Stock by type</h3>
@@ -14,11 +14,11 @@ export default {
         chart,
     },
     async created() {
-        await this.$store.dispatch({ type: 'loadToys' })
+        await this.$store.dispatch({ type: 'loadActivitys' })
     },
     computed: {
-        toys() {
-            return this.$store.getters.toys
+        activitys() {
+            return this.$store.getters.activitys
         },
         labels() {
             return this.$store.getters.labels
@@ -31,11 +31,11 @@ export default {
         },
         pricesData() {
             const data = this.labels.map(label => {
-                const filteredToys = this.toys.filter(toy =>
-                    toy.labels.map(label => label.title).includes(label.title)
+                const filteredActivitys = this.activitys.filter(activity =>
+                    activity.labels.map(label => label.title).includes(label.title)
                 )
-                return filteredToys.reduce(
-                    (avgPrice, toy) => avgPrice + toy.price / filteredToys.length,
+                return filteredActivitys.reduce(
+                    (avgPrice, activity) => avgPrice + activity.price / filteredActivitys.length,
                     0
                 )
             })
@@ -54,10 +54,10 @@ export default {
         },
         stockData() {
             const data = this.labels.map(label => {
-                return this.toys.reduce(
-                    (acc, toy) =>
-                        toy.labels.map(label => label.title).includes(label.title) &&
-                            toy.inStock
+                return this.activitys.reduce(
+                    (acc, activity) =>
+                        activity.labels.map(label => label.title).includes(label.title) &&
+                            activity.inStock
                             ? acc + 1
                             : acc,
                     0

@@ -1,0 +1,12 @@
+.activity-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+    & .activity-preview .custom-activityd {
+        align-items: flex-start;
+
+        & header {
+            font-size: 1em;
+        }
+    }
+}
