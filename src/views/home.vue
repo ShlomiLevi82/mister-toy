@@ -4,13 +4,13 @@
       <img src="../assets/imgs/children-playing-outside-vector.jpg" alt="">
     </section>
     <section class="login">
-      <form @submit.prevent="login">
+      <form @submit.prevent="doLogin">
         <h1>Busy Todlers</h1>
         <div>
-          <input type="string" placeholder="Username" v-model="credentials.username">
+          <input type="string" placeholder="User name" v-model="loginCred.username">
         </div>
         <div>
-          <input type="password" placeholder="Password" v-model="credentials.password">
+          <input type="password" placeholder="Password" v-model="loginCred.password">
         </div>
         <button>Log in</button>
 
@@ -29,36 +29,34 @@
 </template>
 
 <script>
-import { userService } from '../services/user.service'
 
 export default {
   name: 'Home',
   data() {
     return {
-      credentials: {
-        username: '',
-        password: '',
+      loginCred: {
+        username: 'shlomi',
+        password: '123'
       },
     }
   },
-  created() {
-    const user = userService.getLoggedinUser()
-    console.log("🚀 ~ file: home.vue:46 ~ created ~ user:", user)
-    if (user) {
-      this.$store.commit({ type: 'login', user })
-      this.$router.push('/activity')
-    }
+  computed: {
+    loggedinUser() {
+      return this.$store.getters.loggedinUser
+    },
   },
   methods: {
-    async login() {
+    async doLogin() {
+      if (!this.loginCred.username) {
+        this.msg = 'Please enter username/password'
+        return
+      }
       try {
-        await this.$store.dispatch({
-          type: 'login',
-          credentials: this.credentials,
-        })
+        await this.$store.dispatch({ type: "login", userCred: this.loginCred })
         this.$router.push('/activity')
       } catch (err) {
-        console.log('Something went wrong')
+        console.log(err)
+        this.msg = 'Failed to login'
       }
     },
   },

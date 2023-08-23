@@ -1,5 +1,5 @@
 <template>
-    <section v-if="activityToEdit" class="activity-edit">
+    <section class="activity-edit">
         <h1>Activity</h1>
         <form class="form">
             <div class="form-control">
@@ -73,3 +73,50 @@ export default {
     },
 }
 </script>
+
+<style lang="scss" scoped>
+.activity-edit {
+    margin-block: 1rem;
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    & h1 {
+        font-size: 2rem;
+    }
+
+    & .form {
+        font-size: 1.5rem;
+
+        & .form-control {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        & input {
+            height: 2rem;
+            padding: 5px;
+            margin: 5px;
+            width: 100%;
+        }
+
+        & .select-labels {
+            margin-block: 0.8rem;
+        }
+
+        & button {
+            margin-inline: 5px;
+            height: 2rem;
+            width: 250px;
+            border: none;
+            color: #fff;
+            background-color: #007bff;
+            border-radius: 2px;
+
+        }
+    }
+
+}
+</style>

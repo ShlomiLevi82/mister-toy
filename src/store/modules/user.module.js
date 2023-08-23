@@ -2,75 +2,56 @@ import { userService } from '@/services/user.service.js'
 
 export default {
   state: {
-    users: [],
-    loggedInUser: null,
     loggedinUser: null,
-    isLoading: false,
+    users: [],
+    watchedUser: null,
   },
   getters: {
     users({ users }) {
       return users
     },
-    loggedInUser({ loggedInUser }) {
-      return loggedInUser
+    loggedinUser({ loggedinUser }) {
+      console.log(
+        '🚀 ~ file: user-module.js:14 ~ loggedinUser ~ loggedinUser:',
+        loggedinUser
+      )
+      return loggedinUser
     },
-    usersExcludeMe({ users, loggedinUser }) {
-      return users.filter((u) => u._id !== loggedinUser._id)
-    },
-    usersIsLoading({ isLoading }) {
-      return isLoading
+    watchedUser({ watchedUser }) {
+      return watchedUser
     },
   },
   mutations: {
-    login(state, { user }) {
-      state.loggedInUser = user
+    setLoggedinUser(state, { user }) {
+      // Yaron: needed this workaround as for score not reactive from birth
+      state.loggedinUser = user ? { ...user } : null
+      console.log('state.loggedinUser line 28', state.loggedinUser)
     },
-    logout(state) {
-      state.loggedInUser = null
+    setWatchedUser(state, { user }) {
+      state.watchedUser = user
     },
-    // setLoggedinUser(state, { user }) {
-    //   // Yaron: needed this workaround as score not reactive from birth
-    //   state.loggedinUser = user ? { ...user } : null
-    // },
     setUsers(state, { users }) {
       state.users = users
     },
-    setIsLoading(state, { isLoading }) {
-      state.isLoading = isLoading
-    },
     removeUser(state, { userId }) {
       state.users = state.users.filter((user) => user._id !== userId)
+    },
+    setUserScore(state, { score }) {
+      state.loggedinUser.score = score
     },
   },
   actions: {
     async login({ commit }, { userCred }) {
       try {
-        console.log(userCred)
         const user = await userService.login(userCred)
-        commit({ type: 'login', user })
+        console.log('user', user)
+        commit({ type: 'setLoggedinUser', user })
+        return user
       } catch (err) {
-        console.log(err)
-        throw new Error('Cannot login')
+        console.log('userStore: Error in login', err)
+        throw err
       }
     },
-    // async logout({ commit }) {
-    //   await userService.logout()
-    //   commit({ type: 'logout' })
-    // },
-    // async login({ commit }, { userCred }) {
-    //   try {
-    //     console.log(
-    //       '🚀 ~ file: user.module.js:61 ~ login ~ userCred:',
-    //       userCred
-    //     )
-    //     const user = await userService.login(userCred)
-    //     commit({ type: 'setLoggedinUser', user })
-    //     return user
-    //   } catch (err) {
-    //     console.log('userStore: Error in login', err)
-    //     throw err
-    //   }
-    // },
     async signup({ commit }, { userCred }) {
       try {
         const user = await userService.signup(userCred)
@@ -91,13 +72,20 @@ export default {
       }
     },
     async loadUsers({ commit }) {
-      commit({ type: 'setIsLoading', isLoading: true })
       try {
         const users = await userService.getUsers()
         commit({ type: 'setUsers', users })
-        commit({ type: 'setIsLoading', isLoading: false })
       } catch (err) {
         console.log('userStore: Error in loadUsers', err)
+        throw err
+      }
+    },
+    async loadAndWatchUser({ commit }, { userId }) {
+      try {
+        const user = await userService.getById(userId)
+        commit({ type: 'setWatchedUser', user })
+      } catch (err) {
+        console.log('userStore: Error in loadAndWatchUser', err)
         throw err
       }
     },
@@ -127,6 +115,10 @@ export default {
         console.log('userStore: Error in increaseScore', err)
         throw err
       }
+    },
+    // Keep this action for compatability with a common user.service ReactJS/VueJS
+    setWatchedUser({ commit }, payload) {
+      commit(payload)
     },
   },
 }

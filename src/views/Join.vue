@@ -3,7 +3,7 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">Registration Form</div>
+                    <h1 class="card-header">Registration Form</h1>
                     <div class="card-body">
                         <form @submit.prevent="handleSubmit">
                             <div class="form-group">
@@ -63,60 +63,64 @@ export default {
 
 <style lang="scss" scoped>
 .container {
+    grid-column: 2;
     margin-top: 2rem;
-    max-width: 30rem;
-}
+    margin-inline: auto;
+    min-width: 30rem;
 
-.card {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border: none;
-}
 
-.card-header {
-    background-color: #f4f4f4;
-    padding: 1rem;
-    font-weight: bold;
-}
-
-.card-body {
-    padding: 1.5rem;
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-label {
-    font-weight: bold;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-button.btn-primary {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-        background-color: #0056b3;
+    .card {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border: none;
     }
 
-    &:disabled {
-        background-color: #b7b7b7;
-        cursor: not-allowed;
+    .card-header {
+        background-color: #f4f4f4;
+        padding: 1rem;
+        font-weight: bold;
+        font-size: 2rem;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    button.btn-primary {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        background-color: #007bff;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: #0056b3;
+        }
+
+        &:disabled {
+            background-color: #b7b7b7;
+            cursor: not-allowed;
+        }
     }
 }
 </style>

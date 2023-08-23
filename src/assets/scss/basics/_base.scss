@@ -1,119 +1,87 @@
-::selection {
-    background-color: $clr1;
-    color: $clr3;
-}
-
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-html { 
-   font-family: Bahnschrift, sans-serif; 
-   color: $clr3;
-   line-height: 1.8;
-   line-height: lh(26px);
+::selection {
+  background-color: $clr1;
+  color: $clr6;
+}
 
-   @media (max-width: 1300px) {
-       font-size: 13px;
-   }
+html {
+  font-family: montserrat;
+  line-height: 1.6;
+  color: $clr2;
 }
 
 body {
-    margin: 0;
-    background-color: $clr2;
-
-    @include for-normal-layout {
-        &.sidebar-open {
-            overflow: hidden;
-        }
-    }
+  height: 100vh;
+  font-size: rem(18px);
+  margin: 0;
+  overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 500;
-    margin: 0 0 1rem;
-    line-height: lh(40px, 29px);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: caveat;
+
+  line-height: 1;
 }
 
-h1 {
-    font-size: rem(60px);
-}
-
-h2 {
-    font-size: em(16px);
-    margin: em(63px) 0;
-    grid-area: title;
-    color: $clr1;
-    text-transform: uppercase;
-    @include type(boldCondensed);
-}
-
-h3 {
-    font-size: em(29px);
-}
-
-img {
-    width: 100%;
-}
+// img {
+//     width: 100%;
+// }
 
 p {
-    margin: 0 0 1em;
-    max-width: 60ch;
-    @include type(light);
-    .main-text & {
-        grid-column: 3 / 6;
-        font-size: rem(22px);
-        line-height: 1.384615;
-        padding-inline-start: rem(30px);
-        position: relative;
-        
-        &::after {
-            content: "";
-            position: absolute;
-            display: block;
-            top: 0;
-            left: 0;
-            width: 8px;
-            height: 100%;
-            max-height: 42px;
-            background-color: $clr1;
-            
-            @include for-wide-layout {
-                width: 10px;
-            }
-        }
-        
-        @include for-wide-layout {
-            grid-column: 3 / 5;
-            font-size: rem(26px);
-        }
-    }
+  margin: 0 0 1em;
+  max-width: 40ch;
 }
 
-.btn {
-    @include btn;
-    
-    &-dark {
-        @include btn($type: dark);
-    }
-    
-    &-light {
-        @include btn($type: light);
-    }
-}
-
-
-// links
 a {
-    color: $clr1;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+::-webkit-scrollbar {
+  width: 0.7em;
+}
 
-    &.active {
-        background-color: $clr1;
-        color: $clr2;
+::-webkit-scrollbar-track {
+  background: $clr4;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $clr2;
+  outline: 1px solid $clr2;
+}
+button {
+  cursor: pointer;
+  &.icon {
+    background: none;
+    border: none;
+  }
+}
+
+[data-title] {
+      position: relative;
     }
-}
 
-mark {
-    color: $clr1;
-    background-color: transparent;
-}
+    [data-title]:hover::after {
+      content: attr(data-title);
+      position: absolute;
+      font-size: 12px;
+      background: #F10D0D;
+      color: #fff;
+      padding: 0.2em 0.3em;
+      border-radius: 0.2em;
+      text-transform: capitalize;
+      bottom: -25px;
+      width: max-content;
+      left: 12px;
+    }

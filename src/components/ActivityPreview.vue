@@ -12,7 +12,7 @@
                     {{ activity.date }} @ {{ activity.time }}
                 </p>
             </template>
-            <p> Where ? {{ activity.location }}</p>
+            <p class="location"> Where ? {{ activity.location }}</p>
             <div class="activity-labels flex gap-1">
                 <span v-for="label in activity.labels" :key="label">
                     <el-tag class="ml-2" size="small" type="warning">{{ label }}</el-tag>
@@ -64,6 +64,8 @@ export default {
     margin-block-end: 1rem;
     box-shadow: 2px 3px 5px 2px #c7c5f2;
     transition: 0.3s ease-in-out;
+
+    & .location {}
 
     &:hover {
         scale: 1.1;

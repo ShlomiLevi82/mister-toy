@@ -28,6 +28,7 @@ export default {
     },
     computed: {
         activitys() {
+            console.log("🚀 ~ file: ActivityIndex.vue:32 ~ activitys ~ this.$store.getters.filteredActivitys:", this.$store.getters.filteredActivitys)
             return this.$store.getters.filteredActivitys
         },
     },
@@ -40,12 +41,18 @@ export default {
 
 <style lang="scss" scoped>
 .activity-app {
-    grid-column: 2;
+    display: grid;
+    grid-template-columns: 20px 1fr 20px;
+    grid-column: 1/-1;
+    margin-inline: auto;
+
+    &>* {
+        grid-column: 2;
+    }
 
     & .btn {
         font-size: 2rem;
         margin-block: 1rem;
-        margin-inline-start: 2rem;
         border: none;
         color: #fff;
         background-color: #007bff;
@@ -53,6 +60,14 @@ export default {
         padding-inline: 1rem;
         padding-block: 0.5rem;
         cursor: pointer;
+        transition: 0.1s linear;
+        width: 15rem;
+
+        &:hover {
+            box-shadow: 2px 4px 2px 0 #797d81;
+            background-color: #007bffd6;
+
+        }
     }
 }
 </style>

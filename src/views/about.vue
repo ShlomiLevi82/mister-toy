@@ -20,4 +20,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+section {
+    grid-column: 2;
+}
+</style>

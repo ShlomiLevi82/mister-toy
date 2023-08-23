@@ -4,6 +4,12 @@ export default {
   state: {
     activitys: null,
     labels: null,
+    filterBy: {
+      title: '',
+      isActive: true,
+      labels: [],
+      sortBy: 'createdAt -1',
+    },
   },
   getters: {
     activitys({ activitys }) {
@@ -12,8 +18,45 @@ export default {
     labels({ labels }) {
       return labels
     },
+    filteredActivitys({ filterBy, activitys }) {
+      if (!activitys) return
+      //   return activitys
+      const regex = new RegExp(filterBy.title, 'i')
+      let filteredActivitys = activitys.filter((activity) =>
+        regex.test(activity.title)
+      )
+
+      if (filterBy.isActive)
+        filteredActivitys = filteredActivitys.filter(
+          (activity) => activity.isActive
+        )
+
+      if (filterBy.labels.length) {
+        filteredActivitys = filteredActivitys.filter((activity) => {
+          return activity.labels.some(
+            (label) => filterBy.labels.indexOf(label) >= 0
+          )
+        })
+      }
+      const { sortBy } = filterBy
+      if (sortBy !== 'title')
+        filteredActivitys.sort((t1, t2) => t1[sortBy] - t2[sortBy])
+      else filteredActivitys.sort((t1, t2) => t1.title.localeCompare(t2.title))
+      filteredActivitys.sort((t1, t2) => {
+        if (sortBy !== 'title') return t1[sortBy] - t2[sortBy]
+        else return t1.title.localeCompare(t2.title)
+      })
+      // const startIdx = filterBy.pageIdx * pageSize
+
+      // filteredActivitys = filteredActivitys.slice(startIdx, startIdx + pageSize)
+      // console.log(filteredActivitys)
+      return filteredActivitys
+    },
   },
   mutations: {
+    setFilter(state, { filterBy }) {
+      state.filterBy = filterBy
+    },
     setActivitys(state, { activitys }) {
       state.activitys = activitys
     },
@@ -53,10 +96,14 @@ export default {
     },
   },
   actions: {
+    async setFilter({ commit }, { filterBy }) {
+      const activitys = await activityService.query(filterBy)
+      commit({ type: 'setActivitys', activitys })
+    },
     async loadActivitys({ commit }, { filterBy, sortBy }) {
       try {
-        if (!filterBy) filterBy = { txt: '', status: '', labels: null }
-        if (!sortBy) sortBy = {}
+        if (!filterBy) filterBy = { title: '', status: '', labels: null }
+        if (!sortBy) sortBy = { value: 'date 1' }
 
         const labels = activityService.getLabels()
         commit({ type: 'setLabels', labels })
@@ -64,8 +111,7 @@ export default {
         const activitys = await activityService.query(filterBy, sortBy)
         commit({ type: 'setActivitys', activitys })
       } catch (err) {
-        console.log('Could not get activitys')
-        // TODO: throw error to display user
+        console.log('Could not get activitys', err)
       }
     },
     async removeActivity({ commit }, { id }) {

@@ -1,16 +1,23 @@
-// // SETUP
+// Setup
+@import 'setup/variables';
+@import 'setup/functions';
+@import 'setup/mixins';
 @import 'setup/typography';
-// @import 'setup/variables';
-// @import 'setup/mixins';
-// @import 'setup/functions';
 
-// // BASICS
+// Basics
 @import 'basics/helpers';
-// @import 'basics/base';
-// @import 'basics/layout';
+@import 'basics/layout';
+@import 'basics/base';
+@import 'basics/links';
+@import 'basics/forms';
 
-// COMPONENTS
-@import 'components/HomePage';
-@import 'components/App';
-@import 'components/ActivityList';
-@import 'components/ActivityView';
+// Components
+@import 'cmps/app';
+@import 'cmps/app-header';
+@import 'cmps/user-msg';
+@import 'cmps/preview';
+@import 'cmps/list';
+@import 'cmps/social-media';
+@import 'cmps/app-nav';
+@import 'cmps/details';
+@import 'cmps/activity-edit';

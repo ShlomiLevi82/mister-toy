@@ -26,7 +26,8 @@
 }
 
 .custom-card main {
-  text-align: center;
+  font-size: 1rem;
+  margin-block: 0.5rem;
 }
 
 .custom-card footer {

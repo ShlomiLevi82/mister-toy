@@ -79,4 +79,9 @@ export default {
 }
 </script>
 
-<style></style>
+
+<style lang="scss" scoped>
+.dashboard {
+    grid-column: 2;
+}
+</style>

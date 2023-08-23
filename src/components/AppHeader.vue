@@ -6,7 +6,7 @@
                     <img src="@/assets/imgs/logo.jpg" alt="Logo" class="logo">
                 </router-link>
                 <div class="user-name">
-                    hello {{ loggedinUser?.fullname }}
+                    hello {{ loggedInUser?.fullname }}
                 </div>
             </div>
             <div class="search-form">
@@ -19,8 +19,8 @@
                     <router-link class="link" to="/activity">Activities</router-link>
                     <router-link class="link" to="/about">About</router-link>
                     <router-link class="link" to="/dashboard">Dashboard</router-link>
-                    <router-link v-if="!loggedinUser" class="link" to="/join">Join us</router-link>
-                    <span v-if="loggedinUser" class="user-profile-photo">
+                    <router-link v-if="!loggedInUser" class="link" to="/join">Join us</router-link>
+                    <span v-if="loggedInUser" class="user-profile-photo">
                         <router-link class="link" to="/UserPage"></router-link>
                         <div class="online-dot">
                         </div>
@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import { userService } from '../services/user.service'
 
 export default {
     name: 'AppHeader',
@@ -51,8 +50,9 @@ export default {
         },
     },
     computed: {
-        loggedinUser() {
-            return this.$store.getters.loggedinUser
+        loggedInUser() {
+            console.log("🚀 ~ file: AppHeader.vue:56 ~ loggedInUser ~ this.$store.getters.loggedInUser:", this.$store.getters.loggedInUser)
+            return this.$store.getters.loggedInUser
         }
     },
 }

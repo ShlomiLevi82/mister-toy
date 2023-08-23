@@ -1,10 +1,13 @@
 import { httpService } from './http.service.js'
 
+const labels = ['Outdoor', 'Indoor', 'Box game', 'Art', 'For Babys']
+
 export const activityService = {
   query,
   getById,
   remove,
   save,
+  getLabels,
   getEmptyActivity,
 }
 
@@ -26,6 +29,10 @@ async function save(activity) {
     return httpService.put(`activity/${activity._id}`, activity)
   }
   return httpService.post('activity', activity)
+}
+
+function getLabels() {
+  return labels
 }
 
 function getEmptyActivity() {
